@@ -50,7 +50,7 @@ TypeScript, React, React Hook Form, and TailwindCSS
   }
 ```
 
-## Como Utilizar
+## Running
 
 1. Kloning repositori ke lokal Anda.
 2. Di terminal, navigasikan ke folder root proyek.

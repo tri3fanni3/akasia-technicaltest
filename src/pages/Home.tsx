@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CFooter, CHeader } from "../components/Index";
 
 // Context
@@ -10,25 +10,16 @@ import { IPlanet } from "../interfaces/IPlanet";
 const Home = () => {
   const context = useContext(AppContext);
 
-  const [userName, setUserName] = useState('');
-
   const [searchByName, setBySearch] = useState([]);
 
-  useEffect(() => {
-    try {
-      const { name } = JSON.parse(localStorage.getItem('sucess_login') || '{}');
-      setUserName(name);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
   const onChangeFunction = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target: { value, name } } = event;
+    const {
+      target: { value, name },
+    } = event;
     let newArr;
 
     switch (name) {
-      case 'search-input':
+      case "search-input":
         newArr = context?.starWarsPlanets.filter((i: IPlanet) => {
           const planetNameLowerCase = i.name.toLowerCase();
           const valueLowerCase = value.toLowerCase().substring(0, 2);
@@ -43,68 +34,66 @@ const Home = () => {
   };
 
   return (
-    context?.isLoading ? (<span>Loading...</span>) : (
-      <div>
-        <CHeader userName={userName} />
-        <main
-          className="h-screen"
-        >
-          <input
-            type="text"
-            name="search-input"
-            className="shadow border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Search"
-            onChange={onChangeFunction}
-          />
-          <table>
-            <thead>
-              <tr>
-                <th>Name:</th>
-                <th>Rotation Period:</th>
-                <th>Orbital Period:</th>
-                <th>Climate:</th>
-                <th>Population:</th>
-                <th>Diameter:</th>
-              </tr>
-            </thead>
-            {
-              searchByName.length >= 1 ? (searchByName.map((p: IPlanet, index: number) => {
-                return (
-                  <tbody
-                    key={index}
-                  >
-                    <tr>
-                      <td>{p.name}</td>
-                      <td>{p.rotation_period}</td>
-                      <td>{p.orbital_period}</td>
-                      <td>{p.climate}</td>
-                      <td>{p.population}</td>
-                      <td>{p.diameter}</td>
-                    </tr>
-                  </tbody>
-                );
-              })) : (context?.starWarsPlanets.map((p: IPlanet, index: number) => {
-                return (
-                  <tbody
-                    key={index}
-                  >
-                    <tr>
-                      <td>{p.name}</td>
-                      <td>{p.rotation_period}</td>
-                      <td>{p.orbital_period}</td>
-                      <td>{p.climate}</td>
-                      <td>{p.population}</td>
-                      <td>{p.diameter}</td>
-                    </tr>
-                  </tbody>
-                );
-              })
-              )}
-          </table>
-        </main>
-        <CFooter />
-      </div >
-    )
+    <div className="text-center">
+      {context?.isLoading ? (
+        <span>Loading...</span>
+      ) : (
+        <>
+          <CHeader />
+          <main className="mx-20 my-10 min-h-screen">
+            <input
+              type="text"
+              name="search-input"
+              className="mb-10 shadow border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="search by name"
+              onChange={onChangeFunction}
+            />
+            <table className="min-w-full">
+              <thead>
+                <tr>
+                  <th>Name:</th>
+                  <th>Rotation Period:</th>
+                  <th>Orbital Period:</th>
+                  <th>Climate:</th>
+                  <th>Population:</th>
+                  <th>Diameter:</th>
+                </tr>
+              </thead>
+              {searchByName.length >= 1
+                ? searchByName.map((p: IPlanet, index: number) => {
+                    return (
+                      <tbody key={index}>
+                        <tr>
+                          <td>{p.name}</td>
+                          <td>{p.rotation_period}</td>
+                          <td>{p.orbital_period}</td>
+                          <td>{p.climate}</td>
+                          <td>{p.population}</td>
+                          <td>{p.diameter}</td>
+                        </tr>
+                      </tbody>
+                    );
+                  })
+                : context?.starWarsPlanets.map((p: IPlanet, index: number) => {
+                    return (
+                      <tbody key={index}>
+                        <tr>
+                          <td>{p.name}</td>
+                          <td>{p.rotation_period}</td>
+                          <td>{p.orbital_period}</td>
+                          <td>{p.climate}</td>
+                          <td>{p.population}</td>
+                          <td>{p.diameter}</td>
+                        </tr>
+                      </tbody>
+                    );
+                  })}
+            </table>
+          </main>
+          <CFooter />
+        </>
+      )}
+    </div>
   );
 };
 
